@@ -1,6 +1,8 @@
 const User = require('../../models/User')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { UserInputError } = require('apollo-server');
+const { validateLoginInput, validateRegisterInput } = require('../../utils/validate')
 
 
 function generateToken(user) {
@@ -25,7 +27,30 @@ module.exports = {
             authInput: { username, email, password }
         }) => {
             //validate user data
+            const { errors, valid } = validateRegisterInput(username, email, password);
+            if (!valid) {
+                throw new UserInputError('Error', {
+                    errors
+                })
+            }
+
             //make sure user doesnt already exist
+            const userFromDBforUsername = await User.findOne({ username });
+            if (userFromDBforUsername) {
+                throw new UserInputError('username is already taken', {
+                    errors: {
+                        username: 'username is already taken'
+                    }
+                })
+            }
+            const userFromDBforEmail = await User.findOne({ email });
+            if (userFromDBforEmail) {
+                throw new UserInputError('email is already in use', {
+                    errors: {
+                        email: 'email is already in use'
+                    }
+                })
+            }
             //hash the password and create an user token
             const hashedPassword = await bcrypt.hash(password, 12);
             const newUser = new User({
