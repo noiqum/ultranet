@@ -6,6 +6,7 @@ const { validateLoginInput, validateRegisterInput } = require('../../utils/valid
 
 
 function generateToken(user) {
+
     return jwt.sign(
         {
             id: user.id,
@@ -19,14 +20,18 @@ function generateToken(user) {
 
 
 module.exports = {
+
     Query: {
         test: () => 'hi there'
     },
+
     Mutation: {
         register: async (_, {
             authInput: { username, email, password }
         }) => {
+
             //validate user data
+
             const { errors, valid } = validateRegisterInput(username, email, password);
             if (!valid) {
                 throw new UserInputError('Error', {
@@ -35,7 +40,9 @@ module.exports = {
             }
 
             //make sure user doesnt already exist
+
             const userFromDBforUsername = await User.findOne({ username });
+
             if (userFromDBforUsername) {
                 throw new UserInputError('username is already taken', {
                     errors: {
@@ -43,7 +50,9 @@ module.exports = {
                     }
                 })
             }
+
             const userFromDBforEmail = await User.findOne({ email });
+
             if (userFromDBforEmail) {
                 throw new UserInputError('email is already in use', {
                     errors: {
@@ -51,8 +60,10 @@ module.exports = {
                     }
                 })
             }
+
             //hash the password and create an user token
             const hashedPassword = await bcrypt.hash(password, 12);
+
             const newUser = new User({
                 email,
                 username,
@@ -67,6 +78,40 @@ module.exports = {
             return {
                 ...resultFromBD._doc,
                 id: resultFromBD._id,
+                token
+            };
+
+        },
+
+        login: async (_, { email, password }) => {
+
+            const { errors, valid } = validateLoginInput(email, password);
+
+            if (!valid) {
+                throw new UserInputError('Error', {
+                    errors
+                })
+            }
+
+            const userFromDB = await User.findOne({ email });
+
+            if (!userFromDB) {
+                errors.general = 'User not found';
+                throw new UserInputError('User not found', { errors });
+            }
+
+            const match = await bcrypt.compare(password, userFromDB.password);
+
+            if (!match) {
+                errors.general = 'Wrong crendetials';
+                throw new UserInputError('Wrong crendetials', { errors });
+            }
+
+            const token = generateToken(userFromDB);
+
+            return {
+                ...userFromDB._doc,
+                id: userFromDB._id,
                 token
             };
 
