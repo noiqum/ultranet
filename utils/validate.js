@@ -32,11 +32,11 @@ module.exports.validateLoginInput = (email, password) => {
     const errors = {};
 
     if (email.trim() === '') {
-        errors.email = 'email must not be empty';
+        errors.email = 'email is required';
     }
 
     if (password.trim() === '') {
-        errors.password = 'Password must not be empty';
+        errors.password = 'Password is required';
     }
 
     return {
