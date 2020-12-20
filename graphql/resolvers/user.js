@@ -120,7 +120,7 @@ module.exports = {
         verifyToken: (_, { token }) => {
             jwt.verify(token, process.env.SECRET_KEY, (err, decodedToken) => {
                 if (err) throw new UserInputError('Error')
-                return decodedToken.id;
+                return { id: decodedToken.id };
             })
         }
     }
