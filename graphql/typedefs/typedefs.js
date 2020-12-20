@@ -18,6 +18,7 @@ input AuthInput{
 type Mutation{
     register(authInput: AuthInput):User!
     login(email: String!, password: String!): User!
+    verifyToken(token:String!):String!
 }
 `
 
