@@ -33,6 +33,7 @@ module.exports = {
             //validate user data
 
             const { errors, valid } = validateRegisterInput(username, email, password);
+
             if (!valid) {
                 throw new UserInputError('Error', {
                     errors
@@ -115,6 +116,12 @@ module.exports = {
                 token
             };
 
+        },
+        verifyToken: (_, { token }) => {
+            jwt.verify(token, process.env.SECRET_KEY, (err, decodedToken) => {
+                if (err) throw new UserInputError('Error')
+                return decodedToken.id;
+            })
         }
     }
 }
