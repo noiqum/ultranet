@@ -15,10 +15,14 @@ input AuthInput{
     email:String!
     password:String!
 }
+type TokenResponse{
+    id:String!
+    email:String!
+}
 type Mutation{
     register(authInput: AuthInput):User!
     login(email: String!, password: String!): User!
-    verifyToken(token:String!):String!
+    verifyToken(token:String!):TokenResponse!
 }
 `
 

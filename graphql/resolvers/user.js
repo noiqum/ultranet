@@ -117,11 +117,26 @@ module.exports = {
             };
 
         },
-        verifyToken: (_, { token }) => {
-            jwt.verify(token, process.env.SECRET_KEY, (err, decodedToken) => {
-                if (err) throw new UserInputError('Error')
-                return { id: decodedToken.id };
-            })
+        verifyToken: async (_, { token }) => {
+            try {
+                jwt.verify(token, process.env.SECRET_KEY, (err, decodedToken) => {
+                    if (err) {
+                        throw new UserInputError('Error', {
+                            err
+                        })
+                    } else {
+                        return {
+                            email: decodedToken.email,
+                            id: decodedToken.id
+                        }
+                    }
+                })
+            } catch (error) {
+                throw new UserInputError('Error', {
+                    error
+                })
+            }
+
         }
     }
 }
