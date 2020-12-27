@@ -29,8 +29,6 @@ type Friend{
     username:String! 
 }
 input CreatePostInput{
-    userID:String! 
-    username:String!
     option:String! 
     content:String! 
     friend:[FriendInput] 
