@@ -10,12 +10,22 @@ module.exports = {
     },
     Mutation: {
         createPost: async (_, { postInput: { option, content } }, context) => {
-            // const user = checkAuth(context);
-            console.log(context)
-            // console.log(user)
-            console.log(option, content)
+
+            const user = checkAuth(context);
+
+            const newPost = new Post({
+                username: user.username,
+                user: user.id,
+                option,
+                content,
+                createdAt: new Date().toISOString()
+            })
+
+            const post = await newPost.save()
+            console.log(post)
             return {
-                id: 'deneme'
+                ...post._doc,
+                id: post._id
             }
         }
     }
