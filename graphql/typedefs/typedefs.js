@@ -4,6 +4,7 @@ module.exports = gql`
 type Query{
     test:String!
     getPost:[Post!]
+    getUser:User!
 }
 type User{
     id:ID!

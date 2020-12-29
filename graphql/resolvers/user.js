@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { UserInputError } = require('apollo-server');
 const { validateLoginInput, validateRegisterInput } = require('../../utils/validate')
+const checkAuth = require('../../utils/auth')
 
 
 function generateToken(user) {
@@ -22,7 +23,22 @@ function generateToken(user) {
 module.exports = {
 
     Query: {
-        test: () => 'hi there'
+        test: () => 'hi there',
+        getUser: async (_, _, context) => {
+            const authHeader = context.req.headers.authorization;
+            const token = authHeader.split('Bearer ')[1];
+            const user = checkAuth(context);
+            if (user && token) {
+                return {
+                    ...user,
+                    token: token
+                }
+            } else {
+                throw new UserInputError('Error', {
+                    errors: 'login is needed'
+                })
+            }
+        }
     },
 
     Mutation: {
