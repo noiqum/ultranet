@@ -24,7 +24,7 @@ module.exports = {
 
     Query: {
         test: () => 'hi there',
-        getUser: async (_, _, context) => {
+        getUser: async (_, __, context) => {
             const authHeader = context.req.headers.authorization;
             const token = authHeader.split('Bearer ')[1];
             const user = checkAuth(context);
