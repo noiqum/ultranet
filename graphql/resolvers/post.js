@@ -1,6 +1,8 @@
 const checkAuth = require('../../utils/auth')
 const Post = require('../../models/Post');
 
+const addFile = require('../../utils/file');
+
 
 module.exports = {
     Query: {
@@ -9,8 +11,13 @@ module.exports = {
         }
     },
     Mutation: {
-        createPost: async (_, { postInput: { option, content } }, context) => {
-
+        createPost: async (_, { postInput: { option, content, files } }, context) => {
+            if (files) {
+                const uploads = files.map(fileFromClient => {
+                    return addFile(fileFromClient);
+                })
+                console.table(uploads);
+            }
             const user = checkAuth(context);
 
             const newPost = new Post({

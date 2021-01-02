@@ -29,13 +29,20 @@ type Friend{
     id:ID!
     username:String! 
 }
+type File {
+    _id: ID!
+    path: String!
+    filename: String!
+    mimetype: String!
+    encoding: String!
+  }
 input CreatePostInput{
     option:String! 
     content:String! 
     friend:[FriendInput] 
     mood:String 
     place:String
-    
+    files:[Upload]
 }
 type Post{
     id:ID!
@@ -46,6 +53,7 @@ type Post{
     friend:[Friend] 
     mood:String 
     place:String
+    files:[File]
 }
 type Mutation{
     register(authInput: AuthInput):User!
