@@ -53,7 +53,7 @@ type Post{
     friend:[Friend] 
     mood:String 
     place:String
-    files:[File]
+    files:[String]
 }
 type Mutation{
     register(authInput: AuthInput):User!

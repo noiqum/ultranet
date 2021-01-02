@@ -12,12 +12,7 @@ module.exports = {
     },
     Mutation: {
         createPost: async (_, { postInput: { option, content, files } }, context) => {
-            if (files) {
-                const uploads = files.map(fileFromClient => {
-                    return addFile(fileFromClient);
-                })
-                console.table(uploads);
-            }
+
             const user = checkAuth(context);
 
             const newPost = new Post({
@@ -27,9 +22,13 @@ module.exports = {
                 content,
                 createdAt: new Date().toISOString()
             })
-
-            const post = await newPost.save()
-            console.log(post)
+            if (files) {
+                const fileNames = files.map(item => {
+                    return addFile(item).filename
+                })
+                newPost.files = [...fileNames]
+            }
+            const post = newPost.save()
             return {
                 ...post._doc,
                 id: post._id
