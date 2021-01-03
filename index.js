@@ -1,4 +1,5 @@
-const { ApolloServer } = require('apollo-server');
+const { ApolloServer } = require('apollo-server-express');
+const express = require('express')
 const mongoose = require('mongoose');
 const typeDefs = require('./graphql/typedefs/typedefs');
 const resolvers = require('./graphql/resolvers/index')
@@ -18,17 +19,17 @@ const server = new ApolloServer({
         credentials: true
     },
 })
+
+const app = express();
+server.applyMiddleware({ app })
+app.use(express.static('public'))
 mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err) => {
     if (err) {
         console.log(err.message);
     } else {
         console.log('mongodb connected')
-        server.listen(Port, (req, res) => {
-
-        }).then((res) => {
-            console.log(`server in running on ${res.url}`)
-        }).catch(err => {
-            console.log(err)
+        app.listen(Port, (req, res) => {
+            console.log(`server in running`)
         })
     }
 

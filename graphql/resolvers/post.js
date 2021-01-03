@@ -36,7 +36,7 @@ module.exports = {
             const pathName = path.join(__dirname, `/public/images/${filename}`);
             await stream.pipe(fs.createWriteStream(pathName))
             return {
-                url: `https://ancient-retreat-96821.herokuapp.com/public/images/${filename}`
+                url: `https://ancient-retreat-96821.herokuapp.com/images/${filename}`
             }
         }
     }
