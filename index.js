@@ -1,5 +1,6 @@
 const { ApolloServer } = require('apollo-server-express');
-const express = require('express')
+const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const typeDefs = require('./graphql/typedefs/typedefs');
 const resolvers = require('./graphql/resolvers/index')
@@ -23,6 +24,7 @@ const server = new ApolloServer({
 const app = express();
 server.applyMiddleware({ app })
 app.use(express.static('public'))
+app.use(cors())
 mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err) => {
     if (err) {
         console.log(err.message);
