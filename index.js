@@ -13,7 +13,10 @@ const server = new ApolloServer({
     context: ({ req }) => ({
         req
     }),
-    cors: true
+    cors: {
+        origin: '*',
+        credentials: true
+    },
 })
 mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err) => {
     if (err) {
