@@ -42,7 +42,6 @@ input CreatePostInput{
     friend:[FriendInput] 
     mood:String 
     place:String
-    files:[Upload]
 }
 type Post{
     id:ID!
@@ -60,6 +59,7 @@ type Mutation{
     login(email: String!, password: String!): User!
     verifyToken(token:String!):TokenResponse!
     createPost(postInput:CreatePostInput):Post!
+    uploadFile(file:Upload!):String!
 }
 `
 
