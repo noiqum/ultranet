@@ -14,10 +14,11 @@ require('dotenv').config();
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    cors: {
-        origin: '*',			// <- allow request from all domains
-        credentials: true
-    },
+    // cors: {
+    //     origin: '*',			// <- allow request from all domains
+    //     credentials: true
+    // },
+    cors: false,
     context: ({ req }) => ({
         req
     }),
