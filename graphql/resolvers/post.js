@@ -31,12 +31,15 @@ module.exports = {
             }
         },
         uploadFile: async (_, { file }) => {
-            const { createReadStream, filename, mimetype, encoding } = await file;
-            const stream = createReadStream()
-            const pathName = path.join(__dirname, `/public/images/${filename}`);
-            await stream.pipe(fs.createWriteStream(pathName))
+            const { createReadStream, filename } = await file;
+
+            await new Promise(res =>
+                createReadStream()
+                    .pipe(createWriteStream(path.join(__dirname, "../../public/images", filename)))
+                    .on("close", res)
+            );
             return {
-                url: `https://ancient-retreat-96821.herokuapp.com/images/${filename}`
+                url: `https://ancient-retreat-96821.herokuapp.com/public/images/${filename}`
             }
         }
     }
