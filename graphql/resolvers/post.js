@@ -24,7 +24,7 @@ module.exports = {
                 files,
                 createdAt: new Date().toISOString()
             })
-            const post = newPost.save()
+            const post = await newPost.save()
             return {
                 ...post._doc,
                 id: post._id
