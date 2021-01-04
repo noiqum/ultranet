@@ -7,19 +7,20 @@ const Port = process.env.PORT || 5000;
 require('dotenv').config();
 //////////////////////////////////////
 
-
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true
+},
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    cors: {
-        origin: 'http://localhost:3000',
-        credentials: true
-    },
     context: ({ req }) => ({
         req
     })
 })
+server.applyMiddleware({ cors: corsOptions });
+
 mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err) => {
     if (err) {
         console.log(err.message);
