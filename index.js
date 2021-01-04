@@ -1,4 +1,5 @@
-const { ApolloServer } = require('apollo-server');
+const express = require('express');
+const { ApolloServer } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const typeDefs = require('./graphql/typedefs/typedefs');
 const resolvers = require('./graphql/resolvers/index')
@@ -10,7 +11,7 @@ require('dotenv').config();
 const corsOptions = {
     origin: 'http://localhost:3000',
     credentials: true
-},
+};
 
 const server = new ApolloServer({
     typeDefs,
@@ -19,20 +20,22 @@ const server = new ApolloServer({
         req
     })
 })
-server.applyMiddleware({ cors: corsOptions });
+const app = express()
+server.applyMiddleware({ app, cors: corsOptions });
 
 mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err) => {
     if (err) {
         console.log(err.message);
     } else {
         console.log('mongodb connected')
-        server.listen(Port, (req, res) => {
-
-        }).then((res) => {
-            console.log(`server in running on ${res.url}`)
-        }).catch(err => {
-            console.log(err)
-        })
+        app.listen({ port: Port }, () =>
+            console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+        )
+        // .then((res) => {
+        //     console.log(`server in running on ${res.url}`)
+        // }).catch(err => {
+        //     console.log(err)
+        // })
     }
 
 })
