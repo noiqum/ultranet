@@ -3,7 +3,8 @@ const { ApolloServer } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const typeDefs = require('./graphql/typedefs/typedefs');
 const resolvers = require('./graphql/resolvers/index');
-const cors = require('cors')
+const cors = require('cors');
+const bodyParser = require('body-parser');
 ////////////////////////////////////////
 const Port = process.env.PORT || 5000;
 require('dotenv').config();
@@ -23,6 +24,7 @@ const server = new ApolloServer({
 })
 const app = express()
 app.use(cors())
+app.use(bodyParser.json())
 server.applyMiddleware({ app });
 
 mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err) => {
