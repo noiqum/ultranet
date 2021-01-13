@@ -24,8 +24,10 @@ const server = new ApolloServer({
 })
 const app = express()
 app.use(cors())
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-server.applyMiddleware({ app });
+server.applyMiddleware({ app, path: "/" });
 
 mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err) => {
     if (err) {
