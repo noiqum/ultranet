@@ -28,7 +28,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use('/graphql', bodyParser.json())
-server.applyMiddleware({ app, path: "/", cors: false });
+server.applyMiddleware({ app, path: "/graphql", cors: false });
 
 mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err) => {
     if (err) {
