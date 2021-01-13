@@ -1,5 +1,5 @@
 const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer, graphqlExpress } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const typeDefs = require('./graphql/typedefs/typedefs');
 const resolvers = require('./graphql/resolvers/index');
@@ -27,6 +27,7 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use('/graphql', bodyParser.json())
 server.applyMiddleware({ app, path: "/", cors: false });
 
 mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err) => {
